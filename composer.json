@@ -1,0 +1,26 @@
+{
+	"name": "aimfornan/nan-di",
+	"description": "NaN\\DI",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"NaN\\": "src/"
+		}
+	},
+    "require": {
+		"php": "^8.4",
+		"psr/container": "^2.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true
+		}
+	},
+	"scripts": {
+		"tests": "pest --display-warnings -v"
+	},
+	"require-dev": {
+		"pestphp/pest": "^4.4",
+		"phpbench/phpbench": "^1.5"
+	}
+}
