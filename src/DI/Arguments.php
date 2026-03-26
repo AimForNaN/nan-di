@@ -41,9 +41,6 @@ class Arguments implements \Countable, \IteratorAggregate {
 		return new self($arguments);
 	}
 
-	/**
-	 * @throws \ReflectionException
-	 */
 	static public function fromParameter(\ReflectionParameter $param): ArgumentInterface {
 		return Argument::fromParameter($param);
 	}

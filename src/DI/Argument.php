@@ -2,13 +2,7 @@
 
 namespace NaN\DI;
 
-use AllowDynamicProperties;
 use NaN\DI\Interfaces\ArgumentInterface;
-use Psr\Container\{
-	ContainerExceptionInterface as PsrContainerExceptionInterface,
-	ContainerInterface as PsrContainerInterface,
-	NotFoundExceptionInterface,
-};
 
 class Argument implements ArgumentInterface {
 	protected mixed $_default_value;
@@ -38,9 +32,6 @@ class Argument implements ArgumentInterface {
 		return $arg;
 	}
 
-	/**
-	 * @throws \ReflectionException
-	 */
 	public function getDefaultValue(): mixed {
 		return $this->_default_value;
 	}
@@ -98,10 +89,6 @@ class Argument implements ArgumentInterface {
 		return $types;
 	}
 
-	/**
-	 * @throws PsrContainerExceptionInterface
-	 * @throws NotFoundExceptionInterface
-	 */
 	public function resolvePrimitive(mixed $value): mixed {
 		if (!$this->hasType()) {
 			return $value;

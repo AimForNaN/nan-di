@@ -2,8 +2,6 @@
 
 namespace NaN\DI\Interfaces;
 
-use Psr\Container\ContainerInterface as PsrContainerInterface;
-
 interface ArgumentInterface {
 	public function getDefaultValue(): mixed;
 
