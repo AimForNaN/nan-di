@@ -1,63 +1,61 @@
 <?php
 
-use \NaN\App\TemplateEngine;
 use NaN\DI\Container;
-use NaN\Http\Response;
 
 describe('Dependency Injection: Container', function () {
 	test('Class resolution', function () {
 		$container = new Container([
-			Response::class => Response::class,
+			\DateTimeInterface::class => DateTime::class,
 		]);
-		$response = $container->get(Response::class);
+		$response = $container->get(\DateTimeInterface::class);
 
-		expect($response)->toBeinstanceOf(Response::class);
+		expect($response)->toBeinstanceOf(\DateTimeInterface::class);
 	});
 
 	test('Closure resolution', function () {
 		$container = new Container([
-			Response::class => function () {
+			\DateTimeInterface::class => function () {
 				expect(\func_get_args())
 					->toHaveLength(0)
 					->and($this)
 						->toBeInstanceOf(Container::class)
 				;
 
-				return new Response();
+				return new \DateTime();
 			},
 		]);
-		$response = $container->get(Response::class);
+		$response = $container->get(\DateTimeInterface::class);
 
-		expect($response)->toBeinstanceOf(Response::class);
+		expect($response)->toBeinstanceOf(DateTimeInterface::class);
 	});
 
 	test('Delegate', function () {
 		$delegate = new Container([
-			TemplateEngine::class => TemplateEngine::class,
+			\DateTimeInterface::class => DateTime::class,
 		]);
 		$container = new Container(delegates: [$delegate]);
 
 		expect($container)
 			->toHaveCount(1)
-			->and($container->has(TemplateEngine::class))
+			->and($container->has(\DateTimeInterface::class))
 				->toBeTrue()
-			->and($container->get(TemplateEngine::class))
-				->toBeinstanceOf(TemplateEngine::class)
+			->and($container->get(\DateTimeInterface::class))
+				->toBeinstanceOf(\DateTimeInterface::class)
 		;
 	});
 
 	test('Single instance resolution', function () {
 		$container = new Container([
-			Response::class => new Response(),
+			\DateTimeInterface::class => new \DateTime(),
 		]);
-		$response = $container->get(Response::class);
+		$response = $container->get(\DateTimeInterface::class);
 
-		expect($container->has(Response::class))
+		expect($container->has(\DateTimeInterface::class))
 			->toBeTrue()
 			->and($response)
-				->toBeinstanceOf(Response::class)
+				->toBeinstanceOf(\DateTimeInterface::class)
 			->and($response)
-				->toBe($container->get(Response::class))
+				->toBe($container->get(\DateTimeInterface::class))
 		;
 	});
 });
