@@ -35,10 +35,8 @@ describe('Dependency Injection: Container', function () {
 		]);
 		$container = new Container(delegates: [$delegate]);
 
-		expect($container)
-			->toHaveCount(1)
-			->and($container->has(\DateTimeInterface::class))
-				->toBeTrue()
+		expect($container->has(\DateTimeInterface::class))
+			->toBeTrue()
 			->and($container->get(\DateTimeInterface::class))
 				->toBeinstanceOf(\DateTimeInterface::class)
 		;

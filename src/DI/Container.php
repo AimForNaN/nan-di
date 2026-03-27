@@ -4,7 +4,13 @@ namespace NaN\DI;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
-class Container implements \Countable, \IteratorAggregate, PsrContainerInterface {
+class
+	Container
+implements
+	Interfaces\ContainerDelegatesInterface,
+	Interfaces\ContainerSetterInterface,
+	PsrContainerInterface
+{
 	use Traits\ContainerDelegatesTrait;
 	use Traits\ContainerSetterTrait;
 

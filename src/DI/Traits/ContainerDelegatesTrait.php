@@ -18,13 +18,6 @@ trait ContainerDelegatesTrait {
 		return $this;
 	}
 
-	public function count(): int {
-		$count = \count($this->_services);
-		$count += \iterator_count($this->getIterator());
-
-		return $count;
-	}
-
 	public function get(string $id): mixed {
 		$entry = $this->_services[$id] ?? null;
 
