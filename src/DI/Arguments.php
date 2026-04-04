@@ -3,14 +3,19 @@
 namespace NaN\DI;
 
 use NaN\DI\Interfaces\ArgumentInterface;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\{
+	ContainerExceptionInterface,
+	ContainerInterface as PsrContainerInterface,
+	NotFoundExceptionInterface,
+};
 
 class Arguments implements \Countable, \IteratorAggregate {
+	protected readonly array $_args;
+
 	public function __construct(
-		protected readonly array $_args = [],
+		Argument ...$args,
 	) {
+		$this->_args = $args;
 	}
 
 	public function count(): int {
@@ -22,7 +27,7 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 */
 	static public function fromCallable(callable $callable): self {
 		$arguments = static::_analyzeCallable($callable);
-		return new self($arguments);
+		return new self(...$arguments);
 	}
 
 	/**
@@ -30,7 +35,7 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 */
 	static public function fromClassConstructor(string $class): self {
 		$arguments = static::_analyzeClassConstructor($class);
-		return new self($arguments);
+		return new self(...$arguments);
 	}
 
 	/**
@@ -38,7 +43,7 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 */
 	static public function fromClassMethod(string $class, string $method): self {
 		$arguments = static::_analyzeClassMethod($class, $method);
-		return new self($arguments);
+		return new self(...$arguments);
 	}
 
 	static public function fromParameter(\ReflectionParameter $param): ArgumentInterface {
@@ -66,14 +71,28 @@ class Arguments implements \Countable, \IteratorAggregate {
 				} else {
 					$resolved[] = $values[$name];
 				}
-			} else if ($container) {
+			} else {
 				$type = \array_find_key($argument->getTypes(), fn($x) => !$x);
 
-				if ($type) {
-					$resolved[] = $container->get($type);
+				if (!empty($type) && $container) {
+					if (
+						\class_exists($type, false) ||
+						\interface_exists($type, false)
+					) {
+						if (!$container->has($type) && $argument->hasDefaultValue()) {
+							$resolved[] = $argument->getDefaultValue();
+						} else {
+							$resolved[] = $container->get($type);
+						}
+
+						// Make sure default value doesn't override anything!
+						continue;
+					}
 				}
-			} else if ($argument->hasDefaultValue()) {
-				$resolved[] = $argument->getDefaultValue();
+
+				if ($argument->hasDefaultValue()) {
+					$resolved[] = $argument->getDefaultValue();
+				}
 			}
 		}
 
