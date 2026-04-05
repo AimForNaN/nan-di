@@ -32,6 +32,22 @@ class Argument implements ArgumentInterface {
 		return $arg;
 	}
 
+	public function getClasses(): array {
+		$ret = [];
+
+		foreach ($this->_types as $type => $is_built_in) {
+			if ($is_built_in) {
+				continue;
+			}
+
+			if (\class_exists($type, false)) {
+				$ret[] = $type;
+			}
+		}
+
+		return $ret;
+	}
+
 	public function getDefaultValue(): mixed {
 		return $this->_default_value;
 	}
@@ -42,6 +58,10 @@ class Argument implements ArgumentInterface {
 
 	public function getTypes(): array {
 		return $this->_types;
+	}
+
+	public function hasClasses(): bool {
+		return \array_any($this->_types, fn(bool $is_built_in, string $type) => $is_built_in && \class_exists($type, false));
 	}
 
 	public function hasDefaultValue(): bool {

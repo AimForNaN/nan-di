@@ -3,6 +3,8 @@
 namespace NaN\DI\Interfaces;
 
 interface ArgumentInterface {
+	public function getClasses(): array;
+
 	public function getDefaultValue(): mixed;
 
 	public function getName(): string;
@@ -10,6 +12,8 @@ interface ArgumentInterface {
 	public function getTypes(): array;
 
 	public function hasDefaultValue(): bool;
+
+	public function hasClasses(): bool;
 
 	public function hasType(?string $type = null): bool;
 
