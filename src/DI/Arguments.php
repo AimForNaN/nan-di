@@ -9,8 +9,8 @@ use Psr\Container\{
 	NotFoundExceptionInterface,
 };
 
-class Arguments implements \Countable, \IteratorAggregate {
-	protected readonly array $_args;
+readonly class Arguments implements \Countable, \IteratorAggregate {
+	protected array $_args;
 
 	public function __construct(
 		Argument ...$args,
@@ -26,7 +26,9 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 * @throws \ReflectionException
 	 */
 	static public function fromCallable(callable $callable): self {
-		$arguments = static::_analyzeCallable($callable);
+		$rf = new \ReflectionFunction($callable);
+		$arguments = \array_map(static::fromParameter(...), $rf->getParameters());
+
 		return new self(...$arguments);
 	}
 
@@ -34,7 +36,10 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 * @throws \ReflectionException
 	 */
 	static public function fromClassConstructor(string $class): self {
-		$arguments = static::_analyzeClassConstructor($class);
+		$rf = new \ReflectionClass($class);
+		$rf = $rf->getConstructor();
+		$arguments = \array_map(static::fromParameter(...), $rf->getParameters());
+
 		return new self(...$arguments);
 	}
 
@@ -42,7 +47,10 @@ class Arguments implements \Countable, \IteratorAggregate {
 	 * @throws \ReflectionException
 	 */
 	static public function fromClassMethod(string $class, string $method): self {
-		$arguments = static::_analyzeClassMethod($class, $method);
+		$rf = new \ReflectionClass($class);
+		$rf = $rf->getMethod($method);
+		$arguments = \array_map(static::fromParameter(...), $rf->getParameters());
+
 		return new self(...$arguments);
 	}
 
@@ -55,10 +63,12 @@ class Arguments implements \Countable, \IteratorAggregate {
 	}
 
 	/**
+	 * @todo Handle variadic parameters!
+	 *
 	 * @throws ContainerExceptionInterface
 	 * @throws NotFoundExceptionInterface
 	 */
-	public function resolve(array $values, ?PsrContainerInterface $container = null): array {
+	public function resolve(array $values = [], ?PsrContainerInterface $container = null): array {
 		$resolved = [];
 
 		/** @var ArgumentInterface $argument */
@@ -97,34 +107,5 @@ class Arguments implements \Countable, \IteratorAggregate {
 		}
 
 		return $resolved;
-	}
-
-	/**
-	 * @throws \ReflectionException
-	 */
-	static protected function _analyzeCallable(callable $callable): array {
-		$rf = new \ReflectionFunction($callable);
-
-		return \array_map(static::fromParameter(...), $rf->getParameters());
-	}
-
-	/**
-	 * @throws \ReflectionException
-	 */
-	static protected function _analyzeClassConstructor(string $class): array {
-		$rf = new \ReflectionClass($class);
-		$rf = $rf->getConstructor();
-
-		return \array_map(static::fromParameter(...), $rf->getParameters());
-	}
-
-	/**
-	 * @throws \ReflectionException
-	 */
-	static protected function _analyzeClassMethod(string $class, string $method): array {
-		$rf = new \ReflectionClass($class);
-		$rf = $rf->getMethod($method);
-
-		return \array_map(static::fromParameter(...), $rf->getParameters());
 	}
 }

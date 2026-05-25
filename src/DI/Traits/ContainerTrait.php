@@ -4,8 +4,10 @@ namespace NaN\DI\Traits;
 
 use NaN\DI\Arguments;
 use NaN\DI\Exceptions\NotFoundException;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\{
+	ContainerExceptionInterface,
+	NotFoundExceptionInterface,
+};
 
 trait ContainerTrait {
 	protected array $_services = [];
@@ -30,8 +32,8 @@ trait ContainerTrait {
 
 	/**
 	 * @throws ContainerExceptionInterface
-	 * @throws \ReflectionException
 	 * @throws NotFoundExceptionInterface
+	 * @throws \ReflectionException
 	 */
 	protected function _resolve(mixed $value): mixed {
 		if ($value instanceof \Closure) {

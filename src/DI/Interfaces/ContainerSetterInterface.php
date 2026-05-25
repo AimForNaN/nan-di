@@ -3,5 +3,5 @@
 namespace NaN\DI\Interfaces;
 
 interface ContainerSetterInterface {
-	public function set(string $id, mixed $value): static;
+	public function set(string $id, mixed $value): ContainerSetterInterface;
 }
