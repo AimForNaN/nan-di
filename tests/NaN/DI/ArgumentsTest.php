@@ -22,4 +22,13 @@ describe('Dependency Injection: Arguments', function () {
 				->toBeInstanceOf(\DateTimeInterface::class);
 		;
 	});
+
+	test('DateTime', function () {
+		$arguments = Arguments::fromClassConstructor(\DateTime::class);
+		$resolved = $arguments->resolve();
+
+		expect($arguments)->toHaveCount(2);
+
+		$dt = new \DateTime(...$resolved);
+	});
 });
