@@ -23,6 +23,15 @@ describe('Dependency Injection: Arguments', function () {
 		;
 	});
 
+	test('Without constructor', function () {
+		class Test {}
+
+		$arguments = Arguments::fromClassConstructor(Test::class);
+		$resolved = $arguments->resolve();
+
+		expect($arguments)->toHaveCount(0);
+	});
+
 	test('DateTime', function () {
 		$arguments = Arguments::fromClassConstructor(\DateTime::class);
 		$resolved = $arguments->resolve();

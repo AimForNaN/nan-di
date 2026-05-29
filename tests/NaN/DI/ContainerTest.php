@@ -6,10 +6,15 @@ describe('Dependency Injection: Container', function () {
 	test('Class resolution', function () {
 		$container = new Container([
 			\DateTimeInterface::class => DateTime::class,
+			Test::class => Test::class,
 		]);
 		$response = $container->get(\DateTimeInterface::class);
 
 		expect($response)->toBeinstanceOf(\DateTimeInterface::class);
+
+		$response = $container->get(Test::class);
+
+		expect($response)->toBeinstanceOf(Test::class);
 	});
 
 	test('Closure resolution', function () {
