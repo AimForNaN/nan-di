@@ -37,8 +37,13 @@ readonly class Arguments implements \Countable, \IteratorAggregate {
 	 */
 	static public function fromClassConstructor(string $class): self {
 		$rf = new \ReflectionClass($class);
-		$rf = $rf->getConstructor();
-		$arguments = \array_map(static::fromParameter(...), $rf->getParameters());
+		$constructor = $rf->getConstructor();
+
+		if ($constructor) {
+			$arguments = \array_map(static::fromParameter(...), $constructor->getParameters());
+		}
+
+		$arguments ??= [];
 
 		return new self(...$arguments);
 	}
