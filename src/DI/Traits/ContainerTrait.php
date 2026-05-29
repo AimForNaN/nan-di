@@ -44,7 +44,7 @@ trait ContainerTrait {
 			return $value();
 		}
 
-		if (\is_string($value) && \class_exists($value, false)) {
+		if (\is_string($value)) {
 			$args = Arguments::fromClassConstructor($value);
 			$resolved = $args->resolve([], $this);
 			return new $value(...$resolved);
