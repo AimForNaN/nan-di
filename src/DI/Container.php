@@ -2,15 +2,14 @@
 
 namespace NaN\DI;
 
-class Container implements Interfaces\ContainerDelegatesInterface
-{
-	use Traits\ContainerDelegatesTrait;
+use Psr\Container\ContainerInterface;
+
+class Container implements ContainerInterface {
+	use Traits\ContainerTrait;
 
 	public function __construct(
 		array $services = [],
-		iterable $delegates = [],
 	) {
 		$this->_services = $services;
-		$this->addDelegates(...$delegates);
 	}
 }

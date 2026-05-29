@@ -1,6 +1,6 @@
 <?php
 
-use NaN\DI\Container;
+use NaN\DI\{Container,DelegatesContainer};
 
 describe('Dependency Injection: Container', function () {
 	test('Class resolution', function () {
@@ -33,7 +33,7 @@ describe('Dependency Injection: Container', function () {
 		$delegate = new Container([
 			\DateTimeInterface::class => DateTime::class,
 		]);
-		$container = new Container(delegates: [$delegate]);
+		$container = new DelegatesContainer(delegates: [$delegate]);
 
 		expect($container->has(\DateTimeInterface::class))
 			->toBeTrue()

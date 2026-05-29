@@ -2,8 +2,10 @@
 
 namespace NaN\DI\Traits;
 
-use NaN\DI\Arguments;
-use NaN\DI\Exceptions\NotFoundException;
+use NaN\DI\{
+	Arguments,
+	Exceptions\NotFoundException,
+};
 use Psr\Container\{
 	ContainerExceptionInterface,
 	NotFoundExceptionInterface,
@@ -13,14 +15,15 @@ trait ContainerTrait {
 	protected array $_services = [];
 
 	/**
-	 * @throws \ReflectionException
+	 * @throws ContainerExceptionInterface
 	 * @throws NotFoundException
+	 * @throws \ReflectionException
 	 */
 	public function get(string $id): mixed {
 		$entry = $this->_services[$id] ?? null;
 
 		if ($entry) {
-			return $this->_resolve($entry);
+			return $this->resolve($entry);
 		}
 
 		throw new NotFoundException("Entity {$id} could not be found!");
@@ -35,7 +38,7 @@ trait ContainerTrait {
 	 * @throws NotFoundExceptionInterface
 	 * @throws \ReflectionException
 	 */
-	protected function _resolve(mixed $value): mixed {
+	public function resolve(mixed $value): mixed {
 		if ($value instanceof \Closure) {
 			$value = \Closure::bind($value, $this);
 			return $value();

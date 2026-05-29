@@ -22,7 +22,7 @@ trait ContainerDelegatesTrait {
 		$entry = $this->_services[$id] ?? null;
 
 		if ($entry) {
-			return $this->_resolve($entry);
+			return $this->resolve($entry);
 		}
 
 		$delegate = \iter\search(fn($delegate) => $delegate->has($id), $this->getIterator());
