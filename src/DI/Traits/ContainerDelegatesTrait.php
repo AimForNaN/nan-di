@@ -2,7 +2,10 @@
 
 namespace NaN\DI\Traits;
 
-use NaN\DI\Exceptions\NotFoundException;
+use NaN\DI\{
+	Exceptions\NotFoundException,
+	Interfaces\ContainerDelegatesInterface,
+};
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 trait ContainerDelegatesTrait {
@@ -10,7 +13,7 @@ trait ContainerDelegatesTrait {
 
 	protected array $_delegates = [];
 
-	public function addDelegates(PsrContainerInterface ...$delegates): static {
+	public function addDelegates(PsrContainerInterface ...$delegates): ContainerDelegatesInterface {
 		foreach ($delegates as $delegate) {
 			$this->_delegates[] = $delegate;
 		}
