@@ -1,6 +1,10 @@
 <?php
 
-use NaN\DI\{Container,DelegatesContainer};
+use NaN\DI\{
+	Container,
+	DelegatesContainer,
+	Singleton,
+};
 
 describe('Dependency Injection: Container', function () {
 	test('Class resolution', function () {
@@ -22,8 +26,6 @@ describe('Dependency Injection: Container', function () {
 			\DateTimeInterface::class => function () {
 				expect(\func_get_args())
 					->toHaveLength(0)
-					->and($this)
-						->toBeInstanceOf(Container::class)
 				;
 
 				return new \DateTime();
@@ -50,6 +52,9 @@ describe('Dependency Injection: Container', function () {
 	test('Single instance resolution', function () {
 		$container = new Container([
 			\DateTimeInterface::class => new \DateTime(),
+			'single' => new Singleton(function () {
+				return new \DateTime();
+			}),
 		]);
 		$response = $container->get(\DateTimeInterface::class);
 
@@ -59,6 +64,8 @@ describe('Dependency Injection: Container', function () {
 				->toBeinstanceOf(\DateTimeInterface::class)
 			->and($response)
 				->toBe($container->get(\DateTimeInterface::class))
+			->and($container->get('single'))
+				->toBe($container->get('single'))
 		;
 	});
 });

@@ -5,7 +5,7 @@ namespace NaN\DI\Traits;
 use NaN\DI\{
 	Arguments,
 	Exceptions\NotFoundException,
-};
+	Singleton};
 use Psr\Container\{
 	ContainerExceptionInterface,
 	NotFoundExceptionInterface,
@@ -39,9 +39,14 @@ trait ContainerTrait {
 	 * @throws \ReflectionException
 	 */
 	public function resolve(mixed $value): mixed {
+		if ($value instanceof Singleton) {
+			return $value->resolve($this);
+		}
+
 		if ($value instanceof \Closure) {
-			$value = \Closure::bind($value, $this);
-			return $value();
+			$args = Arguments::fromCallable($value);
+			$resolved = $args->resolve([], $this);
+			return $value(...$resolved);
 		}
 
 		if (\is_string($value)) {
