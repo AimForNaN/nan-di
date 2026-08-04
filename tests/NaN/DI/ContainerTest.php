@@ -40,12 +40,35 @@ describe('Dependency Injection: Container', function () {
 		$delegate = new Container([
 			\DateTimeInterface::class => DateTime::class,
 		]);
-		$container = new DelegatesContainer(delegates: [$delegate]);
+		$container = new DelegatesContainer()->withDelegate($delegate);
 
 		expect($container->has(\DateTimeInterface::class))
 			->toBeTrue()
 			->and($container->get(\DateTimeInterface::class))
 				->toBeinstanceOf(\DateTimeInterface::class)
+		;
+	});
+
+	test('Setter', function () {
+		$container = new Container([
+			\DateTimeInterface::class => DateTime::class,
+		]);
+
+		expect($container->has(\DateTimeInterface::class))
+			->toBeTrue()
+			->and($container->get(\DateTimeInterface::class))
+				->not->toEqual($container->get(\DateTimeInterface::class))
+		;
+
+		$container = $container->withService(
+			\DateTimeInterface::class,
+			new \DateTime(),
+		);
+
+		expect($container->has(\DateTimeInterface::class))
+			->toBeTrue()
+			->and($container->get(\DateTimeInterface::class))
+				->toEqual($container->get(\DateTimeInterface::class))
 		;
 	});
 

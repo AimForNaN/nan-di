@@ -5,7 +5,8 @@ namespace NaN\DI\Traits;
 use NaN\DI\{
 	Arguments,
 	Exceptions\NotFoundException,
-	Singleton};
+	Singleton,
+};
 use Psr\Container\{
 	ContainerExceptionInterface,
 	NotFoundExceptionInterface,

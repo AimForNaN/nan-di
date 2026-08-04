@@ -7,9 +7,7 @@ class DelegatesContainer implements Interfaces\ContainerDelegatesInterface {
 
 	public function __construct(
 		array $services = [],
-		array $delegates = [],
 	) {
 		$this->_services = $services;
-		$this->_delegates = $delegates;
 	}
 }

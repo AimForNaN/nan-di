@@ -2,6 +2,8 @@
 
 namespace NaN\DI\Interfaces;
 
-interface ContainerSetterInterface {
-	public function set(string $id, mixed $value): ContainerSetterInterface;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
+
+interface ContainerSetterInterface extends PsrContainerInterface {
+	public function withService(string $id, mixed $value): ContainerSetterInterface;
 }

@@ -2,10 +2,8 @@
 
 namespace NaN\DI;
 
-use Psr\Container\ContainerInterface;
-
-class Container implements ContainerInterface {
-	use Traits\ContainerTrait;
+class Container implements Interfaces\ContainerSetterInterface {
+	use Traits\ContainerSetterTrait;
 
 	public function __construct(
 		array $services = [],

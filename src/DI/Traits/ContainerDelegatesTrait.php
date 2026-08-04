@@ -9,16 +9,28 @@ use NaN\DI\{
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 trait ContainerDelegatesTrait {
-	use ContainerTrait;
+	use ContainerSetterTrait;
 
 	protected array $_delegates = [];
 
-	public function addDelegates(PsrContainerInterface ...$delegates): ContainerDelegatesInterface {
-		foreach ($delegates as $delegate) {
-			$this->_delegates[] = $delegate;
-		}
+	public function withDelegate(
+		PsrContainerInterface $delegate,
+	): ContainerDelegatesInterface {
+		$clone = clone $this;
 
-		return $this;
+		$clone->_delegates[] = $delegate;
+
+		return $clone;
+	}
+
+	public function withDelegates(
+		PsrContainerInterface ...$delegates,
+	): ContainerDelegatesInterface {
+		$clone = clone $this;
+
+		$clone->_delegates = $delegates;
+
+		return $clone;
 	}
 
 	public function get(string $id): mixed {
