@@ -51,7 +51,7 @@ readonly class Arguments implements \Countable, \IteratorAggregate {
 	/**
 	 * @throws \ReflectionException
 	 */
-	static public function fromClassMethod(string $class, string $method): self {
+	static public function fromClassMethod(object|string $class, string $method): self {
 		$rf = new \ReflectionClass($class);
 		$rf = $rf->getMethod($method);
 		$arguments = \array_map(static::fromParameter(...), $rf->getParameters());
