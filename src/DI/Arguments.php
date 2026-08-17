@@ -94,8 +94,14 @@ readonly class Arguments implements \Countable, \IteratorAggregate {
 						\class_exists($type, false) ||
 						\interface_exists($type, false)
 					) {
-						if (!$container->has($type) && $argument->hasDefaultValue()) {
-							$resolved[] = $argument->getDefaultValue();
+						$has = $container->has($type);
+
+						if (!$has) {
+							if ($argument->hasDefaultValue()) {
+								$resolved[] = $argument->getDefaultValue();
+							} else if ($argument->isNullable()) {
+								$resolved[] = null;
+							}
 						} else {
 							$resolved[] = $container->get($type);
 						}
@@ -107,6 +113,8 @@ readonly class Arguments implements \Countable, \IteratorAggregate {
 
 				if ($argument->hasDefaultValue()) {
 					$resolved[] = $argument->getDefaultValue();
+				} else if ($argument->isNullable()) {
+					$resolved[] = null;
 				}
 			}
 		}
