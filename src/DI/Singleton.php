@@ -2,17 +2,25 @@
 
 namespace NaN\DI;
 
-use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Psr\Container\{
+	ContainerExceptionInterface as PsrContainerExceptionInterface,
+	ContainerInterface as PsrContainerInterface,
+	NotFoundExceptionInterface as PsrNotFoundExceptionInterface,
+};
 
-class Singleton {
+readonly class Singleton {
 	private mixed $__resolved;
 
 	public function __construct(
 		private \Closure $__closure,
 	) {
-		var_dump(gettype($this->__closure));
 	}
 
+	/**
+	 * @throws PsrContainerExceptionInterface
+	 * @throws PsrNotFoundExceptionInterface
+	 * @throws \ReflectionException
+	 */
 	public function resolve(PsrContainerInterface $container) {
 		if (isset($this->__resolved)) {
 			return $this->__resolved;
